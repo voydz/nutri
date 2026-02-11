@@ -4,7 +4,12 @@ from __future__ import annotations
 
 import sqlite3
 
-from .db import get_meals_by_date, get_meals_in_range, get_target_for_date, get_water_by_date
+from .db import (
+    get_meals_by_date,
+    get_meals_in_range,
+    get_target_for_date,
+    get_water_by_date,
+)
 from .models import (
     compute_totals,
     compute_remaining,
@@ -75,7 +80,9 @@ def range_summary(
     return result
 
 
-def _days_below_target(conn: sqlite3.Connection, by_date: dict[str, list[dict]], field: str) -> list[dict]:
+def _days_below_target(
+    conn: sqlite3.Connection, by_date: dict[str, list[dict]], field: str
+) -> list[dict]:
     """Find days where a macro field was below target."""
     below = []
     for d in sorted(by_date.keys()):
@@ -108,7 +115,9 @@ def status_summary(conn: sqlite3.Connection, date: str) -> dict:
         "date": date,
         "meals": len(meals),
         "totals": totals,
-        "target": {k: v for k, v in target.items() if k in MACRO_FIELDS} if target else None,
+        "target": {k: v for k, v in target.items() if k in MACRO_FIELDS}
+        if target
+        else None,
         "remaining": remaining,
         "water_ml": water_total,
     }

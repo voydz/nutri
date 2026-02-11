@@ -25,8 +25,8 @@ uv run nutri today
 
 ### Datenbank-Pfad
 
-- Standard: `~/.local/share/nutri/nutrition.db`
-- Override: `NUTRI_DB_PATH=/pfad/zur/db.sqlite3`
+- Standard: XDG Data Directory (app-spezifisch)
+- Override: `NUTRI_DB_PATH=/path/to/db.sqlite3`
 
 ### Konventionen
 

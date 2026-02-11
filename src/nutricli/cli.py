@@ -53,20 +53,28 @@ def get_conn():
 
 @app.command()
 def log(
-    meal: Annotated[MealType, typer.Option("--meal", case_sensitive=False)] = MealType.snack,
-    desc: Annotated[str, typer.Option("--desc", help="Meal description")] = ..., 
-    cal: Annotated[float, typer.Option("--cal", help="Calories")] = ..., 
+    meal: Annotated[
+        MealType, typer.Option("--meal", case_sensitive=False)
+    ] = MealType.snack,
+    desc: Annotated[str, typer.Option("--desc", help="Meal description")] = ...,
+    cal: Annotated[float, typer.Option("--cal", help="Calories")] = ...,
     protein: Annotated[float, typer.Option("--protein")] = 0,
     carbs: Annotated[float, typer.Option("--carbs")] = 0,
     fat: Annotated[float, typer.Option("--fat")] = 0,
     fiber: Annotated[float, typer.Option("--fiber")] = 0,
     sugar: Annotated[float, typer.Option("--sugar")] = 0,
     sodium: Annotated[float, typer.Option("--sodium")] = 0,
-    confidence: Annotated[Confidence, typer.Option("--confidence", case_sensitive=False)] = Confidence.medium,
-    source: Annotated[Source, typer.Option("--source", case_sensitive=False)] = Source.manual,
+    confidence: Annotated[
+        Confidence, typer.Option("--confidence", case_sensitive=False)
+    ] = Confidence.medium,
+    source: Annotated[
+        Source, typer.Option("--source", case_sensitive=False)
+    ] = Source.manual,
     time_: Annotated[Optional[str], typer.Option("--time", help="HH:MM")] = None,
     date_: Annotated[Optional[str], typer.Option("--date", help="YYYY-MM-DD")] = None,
-    fmt: Annotated[OutputFormat, typer.Option("--format", case_sensitive=False)] = OutputFormat.table,
+    fmt: Annotated[
+        OutputFormat, typer.Option("--format", case_sensitive=False)
+    ] = OutputFormat.table,
 ):
     """Log a meal."""
 
@@ -112,9 +120,15 @@ def edit(
     fiber: Annotated[Optional[float], typer.Option("--fiber")] = None,
     sugar: Annotated[Optional[float], typer.Option("--sugar")] = None,
     sodium: Annotated[Optional[float], typer.Option("--sodium")] = None,
-    meal: Annotated[Optional[MealType], typer.Option("--meal", case_sensitive=False)] = None,
-    confidence: Annotated[Optional[Confidence], typer.Option("--confidence", case_sensitive=False)] = None,
-    fmt: Annotated[OutputFormat, typer.Option("--format", case_sensitive=False)] = OutputFormat.table,
+    meal: Annotated[
+        Optional[MealType], typer.Option("--meal", case_sensitive=False)
+    ] = None,
+    confidence: Annotated[
+        Optional[Confidence], typer.Option("--confidence", case_sensitive=False)
+    ] = None,
+    fmt: Annotated[
+        OutputFormat, typer.Option("--format", case_sensitive=False)
+    ] = OutputFormat.table,
 ):
     """Edit an existing meal."""
 
@@ -167,7 +181,9 @@ def edit(
 @app.command()
 def delete(
     meal_id: Annotated[int, typer.Argument()],
-    fmt: Annotated[OutputFormat, typer.Option("--format", case_sensitive=False)] = OutputFormat.table,
+    fmt: Annotated[
+        OutputFormat, typer.Option("--format", case_sensitive=False)
+    ] = OutputFormat.table,
 ):
     """Delete a meal."""
 
@@ -192,7 +208,9 @@ def delete(
 @app.command()
 def confirm(
     meal_id: Annotated[int, typer.Argument()],
-    fmt: Annotated[OutputFormat, typer.Option("--format", case_sensitive=False)] = OutputFormat.table,
+    fmt: Annotated[
+        OutputFormat, typer.Option("--format", case_sensitive=False)
+    ] = OutputFormat.table,
 ):
     """Confirm a meal (mark as user-verified)."""
 
@@ -215,7 +233,9 @@ def confirm(
 
 @app.command()
 def today(
-    fmt: Annotated[OutputFormat, typer.Option("--format", case_sensitive=False)] = OutputFormat.table,
+    fmt: Annotated[
+        OutputFormat, typer.Option("--format", case_sensitive=False)
+    ] = OutputFormat.table,
 ):
     """Show today's meals and totals."""
 
@@ -235,7 +255,9 @@ def today(
 @app.command()
 def day(
     date: Annotated[str, typer.Argument(help="YYYY-MM-DD")],
-    fmt: Annotated[OutputFormat, typer.Option("--format", case_sensitive=False)] = OutputFormat.table,
+    fmt: Annotated[
+        OutputFormat, typer.Option("--format", case_sensitive=False)
+    ] = OutputFormat.table,
 ):
     """Show meals and totals for a specific date (YYYY-MM-DD)."""
 
@@ -254,15 +276,33 @@ def day(
 
 @app.command()
 def query(
-    last_spec: Annotated[Optional[str], typer.Option("--last", help="Duration, e.g. 7d, 30d")] = None,
+    last_spec: Annotated[
+        Optional[str], typer.Option("--last", help="Duration, e.g. 7d, 30d")
+    ] = None,
     week: Annotated[bool, typer.Option("--week", help="Current week")] = False,
-    offset: Annotated[int, typer.Option("--offset", help="Week offset (e.g. -1 for last week)")] = 0,
-    from_: Annotated[Optional[str], typer.Option("--from", help="Start date YYYY-MM-DD")] = None,
-    to_: Annotated[Optional[str], typer.Option("--to", help="End date YYYY-MM-DD")] = None,
+    offset: Annotated[
+        int, typer.Option("--offset", help="Week offset (e.g. -1 for last week)")
+    ] = 0,
+    from_: Annotated[
+        Optional[str], typer.Option("--from", help="Start date YYYY-MM-DD")
+    ] = None,
+    to_: Annotated[
+        Optional[str], typer.Option("--to", help="End date YYYY-MM-DD")
+    ] = None,
     avg: Annotated[bool, typer.Option("--avg", help="Show daily averages")] = False,
-    trend: Annotated[Optional[str], typer.Option("--trend", help="Show trend for field (e.g. calories)")] = None,
-    below: Annotated[Optional[str], typer.Option("--below", help="Show days below target for field (e.g. protein_g)")] = None,
-    fmt: Annotated[OutputFormat, typer.Option("--format", case_sensitive=False)] = OutputFormat.table,
+    trend: Annotated[
+        Optional[str],
+        typer.Option("--trend", help="Show trend for field (e.g. calories)"),
+    ] = None,
+    below: Annotated[
+        Optional[str],
+        typer.Option(
+            "--below", help="Show days below target for field (e.g. protein_g)"
+        ),
+    ] = None,
+    fmt: Annotated[
+        OutputFormat, typer.Option("--format", case_sensitive=False)
+    ] = OutputFormat.table,
 ):
     """Query meal data over a date range."""
 
@@ -282,7 +322,9 @@ def query(
         raise typer.Exit(1)
 
     conn = get_conn()
-    result = queries.range_summary(conn, date_from, date_to, avg=avg, trend_field=trend, below_field=below)
+    result = queries.range_summary(
+        conn, date_from, date_to, avg=avg, trend_field=trend, below_field=below
+    )
     conn.close()
 
     if fmt == OutputFormat.json:
@@ -296,15 +338,23 @@ def query(
 
 @app.command()
 def target(
-    cal: Annotated[Optional[float], typer.Option("--cal", help="Calorie target")] = None,
+    cal: Annotated[
+        Optional[float], typer.Option("--cal", help="Calorie target")
+    ] = None,
     protein: Annotated[Optional[float], typer.Option("--protein")] = None,
     carbs: Annotated[Optional[float], typer.Option("--carbs")] = None,
     fat: Annotated[Optional[float], typer.Option("--fat")] = None,
     fiber: Annotated[Optional[float], typer.Option("--fiber")] = None,
-    note: Annotated[Optional[str], typer.Option("--note", help="Note (e.g. Training day)")] = None,
-    date_: Annotated[Optional[str], typer.Option("--date", help="Effective date (default: today)")] = None,
+    note: Annotated[
+        Optional[str], typer.Option("--note", help="Note (e.g. Training day)")
+    ] = None,
+    date_: Annotated[
+        Optional[str], typer.Option("--date", help="Effective date (default: today)")
+    ] = None,
     show: Annotated[bool, typer.Option("--show", help="Show current targets")] = False,
-    fmt: Annotated[OutputFormat, typer.Option("--format", case_sensitive=False)] = OutputFormat.table,
+    fmt: Annotated[
+        OutputFormat, typer.Option("--format", case_sensitive=False)
+    ] = OutputFormat.table,
 ):
     """Set or show nutrition targets."""
 
@@ -359,8 +409,12 @@ def water(
     amount: Annotated[Optional[float], typer.Argument()] = None,
     time_: Annotated[Optional[str], typer.Option("--time", help="HH:MM")] = None,
     date_: Annotated[Optional[str], typer.Option("--date", help="YYYY-MM-DD")] = None,
-    show_today: Annotated[bool, typer.Option("--today", help="Show today's water intake")] = False,
-    fmt: Annotated[OutputFormat, typer.Option("--format", case_sensitive=False)] = OutputFormat.table,
+    show_today: Annotated[
+        bool, typer.Option("--today", help="Show today's water intake")
+    ] = False,
+    fmt: Annotated[
+        OutputFormat, typer.Option("--format", case_sensitive=False)
+    ] = OutputFormat.table,
 ):
     """Log or show water intake (in ml)."""
 
@@ -389,7 +443,11 @@ def water(
     conn.close()
 
     if fmt == OutputFormat.json:
-        typer.echo(formatters.output_json({"id": water_id, "amount_ml": amount, "total_ml": total}))
+        typer.echo(
+            formatters.output_json(
+                {"id": water_id, "amount_ml": amount, "total_ml": total}
+            )
+        )
     else:
         typer.echo(f"  {amount:.0f} ml geloggt. Heute: {total / 1000:.1f}L")
 
@@ -400,7 +458,9 @@ def water(
 @app.command()
 def status(
     date_: Annotated[Optional[str], typer.Option("--date", help="YYYY-MM-DD")] = None,
-    fmt: Annotated[OutputFormat, typer.Option("--format", case_sensitive=False)] = OutputFormat.table,
+    fmt: Annotated[
+        OutputFormat, typer.Option("--format", case_sensitive=False)
+    ] = OutputFormat.table,
 ):
     """Quick status summary (for coach)."""
 
@@ -420,7 +480,9 @@ def status(
 
 @app.command()
 def info(
-    fmt: Annotated[OutputFormat, typer.Option("--format", case_sensitive=False)] = OutputFormat.table,
+    fmt: Annotated[
+        OutputFormat, typer.Option("--format", case_sensitive=False)
+    ] = OutputFormat.table,
 ):
     """Show database info and stats."""
 
@@ -440,9 +502,15 @@ def info(
 @app.command()
 def export(
     from_: Annotated[str, typer.Option("--from", help="Start date YYYY-MM-DD")] = ...,
-    to_: Annotated[Optional[str], typer.Option("--to", help="End date YYYY-MM-DD")] = None,
-    fmt: Annotated[ExportFormat, typer.Option("--format", case_sensitive=False)] = ExportFormat.csv,
-    outfile: Annotated[Optional[str], typer.Option("-o", "--output", help="Output file path")] = None,
+    to_: Annotated[
+        Optional[str], typer.Option("--to", help="End date YYYY-MM-DD")
+    ] = None,
+    fmt: Annotated[
+        ExportFormat, typer.Option("--format", case_sensitive=False)
+    ] = ExportFormat.csv,
+    outfile: Annotated[
+        Optional[str], typer.Option("-o", "--output", help="Output file path")
+    ] = None,
 ):
     """Export meal data."""
 

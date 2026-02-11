@@ -11,7 +11,7 @@ from typing import Callable
 def get_db_path() -> Path:
     """Resolve the DB path.
 
-    - Default (XDG-ish): ~/.local/share/nutri/nutrition.db
+    - Default: XDG data directory (app-specific)
     - Override: NUTRI_DB_PATH
     """
 
@@ -98,7 +98,9 @@ def _migrate(conn: sqlite3.Connection, version: int) -> None:
         next_version = version + 1
         migration = MIGRATIONS.get(next_version)
         if not migration:
-            raise RuntimeError(f"Keine Migration auf Schema-Version {next_version} vorhanden.")
+            raise RuntimeError(
+                f"Keine Migration auf Schema-Version {next_version} vorhanden."
+            )
         migration(conn)
         conn.execute(f"PRAGMA user_version = {next_version}")
         version = next_version
@@ -164,11 +166,15 @@ def get_meal(conn: sqlite3.Connection, meal_id: int) -> dict | None:
 
 
 def get_meals_by_date(conn: sqlite3.Connection, date: str) -> list[dict]:
-    rows = conn.execute("SELECT * FROM meals WHERE date = ? ORDER BY time, id", (date,)).fetchall()
+    rows = conn.execute(
+        "SELECT * FROM meals WHERE date = ? ORDER BY time, id", (date,)
+    ).fetchall()
     return [dict(r) for r in rows]
 
 
-def get_meals_in_range(conn: sqlite3.Connection, date_from: str, date_to: str) -> list[dict]:
+def get_meals_in_range(
+    conn: sqlite3.Connection, date_from: str, date_to: str
+) -> list[dict]:
     rows = conn.execute(
         "SELECT * FROM meals WHERE date >= ? AND date <= ? ORDER BY date, time, id",
         (date_from, date_to),
@@ -214,7 +220,9 @@ def insert_water(conn: sqlite3.Connection, **kwargs) -> int:
 
 
 def get_water_by_date(conn: sqlite3.Connection, date: str) -> list[dict]:
-    rows = conn.execute("SELECT * FROM water WHERE date = ? ORDER BY time, id", (date,)).fetchall()
+    rows = conn.execute(
+        "SELECT * FROM water WHERE date = ? ORDER BY time, id", (date,)
+    ).fetchall()
     return [dict(r) for r in rows]
 
 

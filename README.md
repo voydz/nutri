@@ -1,24 +1,41 @@
 # nutri-cli
 
-Kleine CLI zum Tracken von Mahlzeiten, Makros, Zielen und Wasser in einer lokalen SQLite-Datenbank.
+Kleines CLI-Tool zum Tracken von Mahlzeiten, Makros, Zielen und Wasser mit SQLite-Backend.
+
+## Ueberblick
+
+- Fokus auf schnelle, lokale Eingaben (kein Cloud-Account, keine Web-UI)
+- SQLite als simple, robuste Datenbasis
+- Export für Auswertungen (z.B. CSV/JSON)
+- Kompatibel zur ursprünglichen Click-Variante
 
 ## Installation / Setup
 
+Voraussetzungen: Python 3.11+ und `uv`.
+
 ```bash
-cd ~/Code/tinkering/nutri
+cd /path/to/nutri
 make setup
+```
+
+## Quickstart
+
+```bash
+uv run nutri today
+uv run nutri log --meal lunch --desc "Bowl" --cal 650 --protein 45
+uv run nutri water 300
 ```
 
 ## Datenbank
 
 Standard-Pfad:
 
-- `~/.local/share/nutri/nutrition.db`
+- XDG Data Directory (app-spezifisch)
 
 Override per Env-Var:
 
 ```bash
-export NUTRI_DB_PATH=~/tmp/nutri.db
+export NUTRI_DB_PATH=/path/to/nutri.db
 ```
 
 ## Beispiele
@@ -54,6 +71,16 @@ uv run nutri info --format json
 uv run nutri export --from 2026-01-01 --to 2026-01-31 --format csv -o jan.csv
 ```
 
+## Befehle (Auszug)
+
+- `nutri log` Mahlzeit erfassen
+- `nutri today` Tagesübersicht
+- `nutri status` Status im "Coach"-Stil
+- `nutri target` Ziele setzen/anzeigen
+- `nutri water` Wasser loggen/anzeigen
+- `nutri query` Datenabfrage (z.B. Zeitraum)
+- `nutri export` Export (CSV/JSON)
+
 ## Binary Build (PyInstaller)
 
 ```bash
@@ -69,7 +96,7 @@ make package
 
 ## Homebrew (Tap)
 
-Die Formel liegt im Tap-Repo unter `/opt/homebrew/Library/Taps/voydz/homebrew-tap/Formula/nutri.rb`.
+Die Formel liegt im Tap-Repo unter `TAPS_DIR/homebrew-tap/Formula/nutri.rb`.
 Release-Prozess:
 
 1) Version in `pyproject.toml` erhöhen

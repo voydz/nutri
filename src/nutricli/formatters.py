@@ -22,9 +22,7 @@ def format_meal_row(m: dict) -> str:
     conf = ""
     if not m.get("confirmed") and m.get("confidence") != "high":
         conf = f" [{m.get('confidence', '?')}]"
-    return (
-        f"  {mt:<12}│ {desc:<32}│ {cal:>6.0f} kcal │ P: {p:>5.1f}g │ C: {c:>5.1f}g │ F: {f:>5.1f}g{conf}"
-    )
+    return f"  {mt:<12}│ {desc:<32}│ {cal:>6.0f} kcal │ P: {p:>5.1f}g │ C: {c:>5.1f}g │ F: {f:>5.1f}g{conf}"
 
 
 def format_day_table(summary: dict) -> str:
@@ -122,7 +120,9 @@ def format_targets_table(targets: list[dict]) -> str:
     return "\n".join(lines)
 
 
-def format_water_table(entries: list[dict], total_ml: float, target: dict | None = None) -> str:
+def format_water_table(
+    entries: list[dict], total_ml: float, target: dict | None = None
+) -> str:
     lines: list[str] = []
     for w in entries:
         time_str = w.get("time", "?")

@@ -1,17 +1,17 @@
 # nutri-cli
 
-Kleines CLI-Tool zum Tracken von Mahlzeiten, Makros, Zielen und Wasser mit SQLite-Backend.
+Small CLI tool for tracking meals, macros, targets, and water with a SQLite backend.
 
-## Ueberblick
+## Overview
 
-- Fokus auf schnelle, lokale Eingaben (kein Cloud-Account, keine Web-UI)
-- SQLite als simple, robuste Datenbasis
-- Export für Auswertungen (z.B. CSV/JSON)
-- Kompatibel zur ursprünglichen Click-Variante
+- Focus on fast, local input (no cloud account, no web UI)
+- SQLite as a simple, robust data store
+- Export for analysis (e.g. CSV/JSON)
+- Compatible with the original Click version
 
 ## Installation / Setup
 
-Voraussetzungen: Python 3.11+ und `uv`.
+Requirements: Python 3.11+ and `uv`.
 
 ```bash
 cd /path/to/nutri
@@ -26,42 +26,42 @@ uv run nutri log --meal lunch --desc "Bowl" --cal 650 --protein 45
 uv run nutri water 300
 ```
 
-## Datenbank
+## Database
 
-Standard-Pfad:
+Default path:
 
-- XDG Data Directory (app-spezifisch)
+- XDG Data Directory (app-specific)
 
-Override per Env-Var:
+Override via env var:
 
 ```bash
 export NUTRI_DB_PATH=/path/to/nutri.db
 ```
 
-## Beispiele
+## Examples
 
 ```bash
-# Hilfe
+# Help
 uv run nutri --help
 
-# Mahlzeit loggen
+# Log a meal
 uv run nutri log --meal lunch --desc "Bowl" --cal 650 --protein 45
 
-# Heute anzeigen
+# Show today
 uv run nutri today
 
 # Status (coach)
 uv run nutri status
 
-# Ziele setzen / anzeigen
+# Set / show targets
 uv run nutri target --cal 2200 --protein 160
 uv run nutri target --show
 
-# Wasser loggen / anzeigen
+# Log / show water
 uv run nutri water 300
 uv run nutri water --today
 
-# Query: letzte 7 Tage
+# Query: last 7 days
 uv run nutri query --last 7d
 
 # Info
@@ -71,15 +71,15 @@ uv run nutri info --format json
 uv run nutri export --from 2026-01-01 --to 2026-01-31 --format csv -o jan.csv
 ```
 
-## Befehle (Auszug)
+## Commands (excerpt)
 
-- `nutri log` Mahlzeit erfassen
-- `nutri today` Tagesübersicht
-- `nutri status` Status im "Coach"-Stil
-- `nutri target` Ziele setzen/anzeigen
-- `nutri water` Wasser loggen/anzeigen
-- `nutri query` Datenabfrage (z.B. Zeitraum)
-- `nutri export` Export (CSV/JSON)
+- `nutri log` log a meal
+- `nutri today` daily overview
+- `nutri status` status in "coach" style
+- `nutri target` set/show targets
+- `nutri water` log/show water
+- `nutri query` data query (e.g. date range)
+- `nutri export` export (CSV/JSON)
 
 ## Binary Build (PyInstaller)
 
@@ -88,7 +88,7 @@ make build
 ./dist/nutri --help
 ```
 
-Release-Artefakt inkl. SHA256:
+Release artifact incl. SHA256:
 
 ```bash
 make package
@@ -96,10 +96,10 @@ make package
 
 ## Homebrew (Tap)
 
-Die Formel liegt im Tap-Repo unter `TAPS_DIR/homebrew-tap/Formula/nutri.rb`.
-Release-Prozess:
+The formula lives in the tap repo at `TAPS_DIR/homebrew-tap/Formula/nutri.rb`.
+Release process:
 
-1) Version in `pyproject.toml` erhöhen
+1) Bump version in `pyproject.toml`
 2) `make package`
-3) tar.gz + `.sha256` hochladen
-4) Formel-URL + SHA256 aktualisieren
+3) Upload tar.gz + `.sha256`
+4) Update formula URL + SHA256

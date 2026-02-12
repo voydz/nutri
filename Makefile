@@ -2,8 +2,10 @@
 
 .DEFAULT_GOAL := check
 
+PYTHON_VERSION ?= 3.11
+
 setup:
-	uv venv
+	uv venv --python $(PYTHON_VERSION)
 	uv sync --extra dev
 
 run:

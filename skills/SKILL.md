@@ -29,8 +29,14 @@ uv run nutri today
 # Log a meal
 uv run nutri log --meal lunch --desc "Bowl" --cal 650 --protein 45
 
+# Edit / delete / confirm a meal
+uv run nutri edit 12 --cal 700 --protein 50
+uv run nutri delete 12
+uv run nutri confirm 12
+
 # Show today
 uv run nutri today
+uv run nutri day 2026-01-15
 
 # Status (coach)
 uv run nutri status
@@ -51,7 +57,22 @@ uv run nutri info --format json
 
 # Export
 uv run nutri export --from 2026-01-01 --to 2026-01-31 --format csv -o jan.csv
+uv run nutri export --from 2026-01-01 --to 2026-01-31 --format json
 ```
+
+## Commands and flags (current CLI)
+- `log`: `--meal` `--desc` `--cal` `--protein` `--carbs` `--fat` `--fiber` `--sugar` `--sodium` `--confidence` `--source` `--time` `--date` `--format`
+- `edit`: `meal_id` + any of `--desc` `--cal` `--protein` `--carbs` `--fat` `--fiber` `--sugar` `--sodium` `--meal` `--confidence` `--format`
+- `delete`: `meal_id` `--format`
+- `confirm`: `meal_id` `--format`
+- `today`: `--format`
+- `day`: `date` (YYYY-MM-DD) `--format`
+- `query`: `--last` `--week` `--offset` `--from` `--to` `--avg` `--trend` `--below` `--format`
+- `target`: `--cal` `--protein` `--carbs` `--fat` `--fiber` `--note` `--date` `--show` `--format`
+- `water`: `amount` `--time` `--date` `--today` `--format`
+- `status`: `--date` `--format`
+- `info`: `--format`
+- `export`: `--from` `--to` `--format` (`csv` or `json`) `-o/--output`
 
 ## Database location
 - Default: XDG Data Directory (app-specific)

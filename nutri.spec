@@ -1,15 +1,13 @@
 # -*- mode: python ; coding: utf-8 -*-
 
-from PyInstaller.utils.hooks import collect_data_files, collect_submodules
-
 
 a = Analysis(
     ['src/nutricli/__main__.py'],
-    pathex=['src'],
+    pathex=[],
     binaries=[],
-    datas=collect_data_files('rich'),
-    hiddenimports=collect_submodules('rich._unicode_data'),
-    hookspath=[],
+    datas=[],
+    hiddenimports=[],
+    hookspath=['hooks'],
     hooksconfig={},
     runtime_hooks=[],
     excludes=[],

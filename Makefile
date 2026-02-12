@@ -27,6 +27,7 @@ build:
 		--onefile \
 		--name nutri \
 		--target-arch arm64 \
+		--additional-hooks-dir hooks \
 		src/nutricli/__main__.py
 
 package: build

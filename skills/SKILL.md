@@ -1,21 +1,24 @@
-# nutri-cli agent workflow
+---
+name: nutri-cli-usage
+description: Operate the finished nutri CLI for logging meals, water, targets, status, queries, and export. Use when a user asks how to run nutri commands, interpret output, or find database paths and output formats.
+---
+
+# nutri CLI usage skill
 
 ## Purpose
-Use this skill when working on the nutri-cli project. It covers setup, local usage, database handling, testing, build/release, and coding conventions that agents must follow.
+Use this skill when helping users operate the finished `nutri` CLI. Focus on commands, options, output, and DB path. Do not cover development, testing, or release tasks.
 
 ## Scope
-- CLI usage and examples
-- Local development workflow
-- Database path and env override
-- Tests, build, and release steps
-- Code and output conventions
+- Logging meals and water
+- Targets, status, queries, exports
+- Output formats
+- Database location and overrides
 
 ## Key constraints
 - Keep user-facing CLI output in German.
-- CLI behavior and flags must remain compatible with the original Click version.
-- Runtime: Python >= 3.11
-- CLI stack: Typer (Click-compatible) + Rich
-- DB: SQLite (stdlib)
+- Keep existing CLI flags and semantics intact.
+- Default database path: `~/.local/share/nutri/nutrition.db`
+- Output format: `table` or `json` (and `csv` for export)
 
 ## Quick start
 ```bash
@@ -73,20 +76,11 @@ nutri export --from 2026-01-01 --to 2026-01-31 --format json
 - `info`: `--format`
 - `export`: `--from` `--to` `--format` (`csv` or `json`) `-o/--output`
 
+## Output format
+- `table` (default): human-friendly text
+- `json`: machine-readable records
+- `export --format csv`: CSV file output
+
 ## Database location
-- Default: XDG Data Directory (app-specific)
+- Default: `~/.local/share/nutri/nutrition.db`
 - Override: set `NUTRI_DB_PATH=/path/to/nutri.db`
-
-## Development workflow
-1) Read `AGENTS.md` and `README.md` for project rules and usage.
-2) Use `rg` to find relevant code and tests.
-3) Keep CLI output strings in German and preserve existing flags.
-4) Add or update tests when changing behavior.
-5) Run tests if requested or if behavior changed.
-
-## Files to know
-- `README.md`: user-facing usage and examples
-- `AGENTS.md`: repo rules for agents
-- `src/`: CLI implementation
-- `tests/`: automated tests
-- `pyproject.toml`: version and dependencies

@@ -1,86 +1,99 @@
 ---
 name: nutri-cli-usage
-description: Operate the finished nutri CLI for logging meals, water, targets, status, queries, and export. Use when a user asks how to run nutri commands, interpret output, or find database paths and output formats.
+description: Agent guide for operating `nutri` via CLI: log/edit meals, water, targets, summaries, queries, and exports with reliable JSON-first output.
 ---
 
-# nutri CLI usage skill
+# nutri CLI agent
 
-## Purpose
-Use this skill when helping users operate the finished `nutri` CLI. Focus on commands, options, output, and DB path. Do not cover development, testing, or release tasks.
+## Rules
+- Prefer `nutri ...`.
+- Prefer `--format json` where available.
+- Do not invent fields; report only CLI-returned data.
+- On failure: show error + corrected command.
 
-## Scope
-- Logging meals and water
-- Targets, status, queries, exports
-- Output formats
-- Database location and overrides
-
-## Key constraints
-- Keep user-facing CLI output in German.
-- Keep existing CLI flags and semantics intact.
-- Default database path: `~/.local/share/nutri/nutrition.db`
-- Output format: `table` or `json` (and `csv` for export)
-
-## Quick start
+## DB path
+- Default: XDG data dir (app-specific).
+- Override:
 ```bash
-nutri --help
-nutri today
+NUTRI_DB_PATH=/path/to/db.sqlite3 nutri <command>
 ```
 
-## Common usage patterns
+## Workflow
+1. Pick the smallest command that matches intent.
+2. Run with JSON output when possible.
+3. Return action, IDs, dates, totals, and units.
+
+## Global usage
+- Base: `nutri <command> [flags]`
+- Help: `nutri --help`
+- Command help: `nutri <command> --help`
+
+## Core commands
 ```bash
-# Log a meal
-nutri log --meal lunch --desc "Bowl" --cal 650 --protein 45
-
-# Edit / delete / confirm a meal
-nutri edit 12 --cal 700 --protein 50
-nutri delete 12
-nutri confirm 12
-
-# Show today
-nutri today
-nutri day 2026-01-15
-
-# Status (coach)
-nutri status
-
-# Set / show targets
-nutri target --cal 2200 --protein 160
-nutri target --show
-
-# Log / show water
-nutri water 300
-nutri water --today
-
-# Query: last 7 days
-nutri query --last 7d
-
-# Info
+nutri log --meal lunch --desc "Bowl" --cal 650 --protein 45 --format json
+nutri edit 12 --cal 700 --format json
+nutri confirm 12 --format json
+nutri delete 12 --format json
+nutri today --format json
+nutri day 2026-01-15 --format json
+nutri query --last 7d --format json
+nutri query --from 2026-01-01 --to 2026-01-31 --avg --format json
+nutri target --cal 2200 --protein 160 --format json
+nutri target --show --format json
+nutri water 300 --format json
+nutri water --today --format json
+nutri status --format json
 nutri info --format json
-
-# Export
 nutri export --from 2026-01-01 --to 2026-01-31 --format csv -o jan.csv
 nutri export --from 2026-01-01 --to 2026-01-31 --format json
 ```
 
-## Commands and flags (current CLI)
-- `log`: `--meal` `--desc` `--cal` `--protein` `--carbs` `--fat` `--fiber` `--sugar` `--sodium` `--confidence` `--source` `--time` `--date` `--format`
-- `edit`: `meal_id` + any of `--desc` `--cal` `--protein` `--carbs` `--fat` `--fiber` `--sugar` `--sodium` `--meal` `--confidence` `--format`
-- `delete`: `meal_id` `--format`
-- `confirm`: `meal_id` `--format`
-- `today`: `--format`
-- `day`: `date` (YYYY-MM-DD) `--format`
-- `query`: `--last` `--week` `--offset` `--from` `--to` `--avg` `--trend` `--below` `--format`
-- `target`: `--cal` `--protein` `--carbs` `--fat` `--fiber` `--note` `--date` `--show` `--format`
-- `water`: `amount` `--time` `--date` `--today` `--format`
-- `status`: `--date` `--format`
-- `info`: `--format`
-- `export`: `--from` `--to` `--format` (`csv` or `json`) `-o/--output`
+## Exhaustive command and flag map
+- `log`
+  - Positional: none
+  - Flags: `--meal` `--desc` `--cal` `--protein` `--carbs` `--fat` `--fiber` `--sugar` `--sodium` `--confidence` `--source` `--time` `--date` `--format`
+- `edit`
+  - Positional: `meal_id`
+  - Flags: `--desc` `--cal` `--protein` `--carbs` `--fat` `--fiber` `--sugar` `--sodium` `--meal` `--confidence` `--format`
+- `delete`
+  - Positional: `meal_id`
+  - Flags: `--format`
+- `confirm`
+  - Positional: `meal_id`
+  - Flags: `--format`
+- `today`
+  - Positional: none
+  - Flags: `--format`
+- `day`
+  - Positional: `date` (`YYYY-MM-DD`)
+  - Flags: `--format`
+- `query`
+  - Positional: none
+  - Flags: `--last` `--week` `--offset` `--from` `--to` `--avg` `--trend` `--below` `--format`
+- `target`
+  - Positional: none
+  - Flags: `--cal` `--protein` `--carbs` `--fat` `--fiber` `--note` `--date` `--show` `--format`
+- `water`
+  - Positional: `amount` (optional)
+  - Flags: `--time` `--date` `--today` `--format`
+- `status`
+  - Positional: none
+  - Flags: `--date` `--format`
+- `info`
+  - Positional: none
+  - Flags: `--format`
+- `export`
+  - Positional: none
+  - Flags: `--from` `--to` `--format` `-o` `--output`
 
-## Output format
-- `table` (default): human-friendly text
-- `json`: machine-readable records
-- `export --format csv`: CSV file output
-
-## Database location
-- Default: `~/.local/share/nutri/nutrition.db`
-- Override: set `NUTRI_DB_PATH=/path/to/nutri.db`
+## Input constraints
+- Dates must be `YYYY-MM-DD`.
+- `query` requires one of: `--last`, `--week`, or `--from`.
+- `target` set mode requires at least `--cal` unless `--show` is used.
+- `edit` requires at least one field to update.
+- Allowed values:
+  - `--meal`: `breakfast|lunch|dinner|snack`
+  - `--confidence`: `low|medium|high`
+  - `--source`: `vision-ai|manual|barcode`
+  - `--format` (most commands): `table|json`
+  - `export --format`: `csv|json`

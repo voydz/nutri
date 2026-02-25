@@ -33,7 +33,7 @@ def format_day_table(summary: dict) -> str:
     )
 
     if not meals:
-        lines.append(f"  Keine Mahlzeiten für {summary['date']}.")
+        lines.append(f"  No meals for {summary['date']}.")
         return "\n".join(lines)
 
     for m in meals:
@@ -49,16 +49,16 @@ def format_day_table(summary: dict) -> str:
     target = summary.get("target")
     if target:
         lines.append(
-            f"  {'Ziel':<12}│ {'':<32}│ {target.get('calories', 0):>6.0f} kcal │ P: {target.get('protein_g', 0) or 0:>5.1f}g │ C: {target.get('carbs_g', 0) or 0:>5.1f}g │ F: {target.get('fat_g', 0) or 0:>5.1f}g"
+            f"  {'Target':<12}│ {'':<32}│ {target.get('calories', 0):>6.0f} kcal │ P: {target.get('protein_g', 0) or 0:>5.1f}g │ C: {target.get('carbs_g', 0) or 0:>5.1f}g │ F: {target.get('fat_g', 0) or 0:>5.1f}g"
         )
         rem = summary.get("remaining")
         if rem:
             lines.append(
-                f"  {'Übrig':<12}│ {'':<32}│ {rem['calories'] or 0:>6.0f} kcal │ P: {rem['protein_g'] or 0:>5.1f}g │ C: {rem['carbs_g'] or 0:>5.1f}g │ F: {rem['fat_g'] or 0:>5.1f}g"
+                f"  {'Remaining':<12}│ {'':<32}│ {rem['calories'] or 0:>6.0f} kcal │ P: {rem['protein_g'] or 0:>5.1f}g │ C: {rem['carbs_g'] or 0:>5.1f}g │ F: {rem['fat_g'] or 0:>5.1f}g"
             )
 
     if summary.get("water_ml", 0) > 0:
-        lines.append(f"\n  Wasser: {summary['water_ml'] / 1000:.1f}L")
+        lines.append(f"\n  Water: {summary['water_ml'] / 1000:.1f}L")
 
     return "\n".join(lines)
 
@@ -66,32 +66,32 @@ def format_day_table(summary: dict) -> str:
 def format_range_table(result: dict) -> str:
     lines: list[str] = []
     lines.append(
-        f"  Zeitraum: {result['date_from']} bis {result['date_to']} ({result['days']} Tage, {result['total_meals']} Mahlzeiten)"
+        f"  Range: {result['date_from']} to {result['date_to']} ({result['days']} days, {result['total_meals']} meals)"
     )
     lines.append("")
 
     if "averages" in result:
         a = result["averages"]
         lines.append(
-            f"  Durchschnitt: {a['calories']:.0f} kcal │ P: {a['protein_g']:.1f}g │ C: {a['carbs_g']:.1f}g │ F: {a['fat_g']:.1f}g"
+            f"  Average: {a['calories']:.0f} kcal │ P: {a['protein_g']:.1f}g │ C: {a['carbs_g']:.1f}g │ F: {a['fat_g']:.1f}g"
         )
 
     if "trend" in result:
         tr = result["trend"]
         lines.append(
-            f"  Trend: {tr['direction']} {tr['change_per_week']:+.0f} kcal/Woche ({tr['start']:.0f} → {tr['end']:.0f})"
+            f"  Trend: {tr['direction']} {tr['change_per_week']:+.0f} kcal/week ({tr['start']:.0f} -> {tr['end']:.0f})"
         )
 
     if "below_target_days" in result:
         below = result["below_target_days"]
         if below:
-            lines.append(f"\n  Tage unter Ziel ({len(below)}):")
+            lines.append(f"\n  Days below target ({len(below)}):")
             for day in below:
                 lines.append(
-                    f"    {day['date']}: {day['actual']:.0f} / {day['target']:.0f} (fehlen: {day['deficit']:.0f})"
+                    f"    {day['date']}: {day['actual']:.0f} / {day['target']:.0f} (missing: {day['deficit']:.0f})"
                 )
         else:
-            lines.append("  Alle Tage im Zielbereich!")
+            lines.append("  All days are within target!")
 
     if (
         "daily" in result
@@ -102,7 +102,7 @@ def format_range_table(result: dict) -> str:
         for d, info in sorted(result["daily"].items()):
             t = info["totals"]
             lines.append(
-                f"  {d} │ {info['meals']} Mahlzeiten │ {t['calories']:>6.0f} kcal │ P: {t['protein_g']:>5.1f}g │ C: {t['carbs_g']:>5.1f}g │ F: {t['fat_g']:>5.1f}g"
+                f"  {d} │ {info['meals']} meals │ {t['calories']:>6.0f} kcal │ P: {t['protein_g']:>5.1f}g │ C: {t['carbs_g']:>5.1f}g │ F: {t['fat_g']:>5.1f}g"
             )
 
     return "\n".join(lines)
@@ -110,12 +110,12 @@ def format_range_table(result: dict) -> str:
 
 def format_targets_table(targets: list[dict]) -> str:
     if not targets:
-        return "  Keine Ziele gesetzt."
+        return "  No targets set."
     lines: list[str] = []
     for t in targets:
         note = f" ({t['note']})" if t.get("note") else ""
         lines.append(
-            f"  Ab {t['date_from']}{note}: {t['calories']:.0f} kcal │ P: {t.get('protein_g') or 0:.0f}g │ C: {t.get('carbs_g') or 0:.0f}g │ F: {t.get('fat_g') or 0:.0f}g"
+            f"  From {t['date_from']}{note}: {t['calories']:.0f} kcal │ P: {t.get('protein_g') or 0:.0f}g │ C: {t.get('carbs_g') or 0:.0f}g │ F: {t.get('fat_g') or 0:.0f}g"
         )
     return "\n".join(lines)
 
@@ -136,30 +136,30 @@ def format_water_table(
 def format_status_table(status: dict) -> str:
     lines: list[str] = []
     t = status["totals"]
-    lines.append(f"  {status['date']}: {status['meals']} Mahlzeiten")
+    lines.append(f"  {status['date']}: {status['meals']} meals")
     lines.append(
         f"  {t['calories']:.0f} kcal │ P: {t['protein_g']:.1f}g │ C: {t['carbs_g']:.1f}g │ F: {t['fat_g']:.1f}g"
     )
     if status.get("target"):
         tgt = status["target"]
         lines.append(
-            f"  Ziel: {tgt.get('calories', 0):.0f} kcal │ P: {tgt.get('protein_g', 0) or 0:.0f}g │ C: {tgt.get('carbs_g', 0) or 0:.0f}g │ F: {tgt.get('fat_g', 0) or 0:.0f}g"
+            f"  Target: {tgt.get('calories', 0):.0f} kcal │ P: {tgt.get('protein_g', 0) or 0:.0f}g │ C: {tgt.get('carbs_g', 0) or 0:.0f}g │ F: {tgt.get('fat_g', 0) or 0:.0f}g"
         )
     if status.get("remaining"):
         r = status["remaining"]
         lines.append(
-            f"  Übrig: {r['calories'] or 0:.0f} kcal │ P: {r['protein_g'] or 0:.0f}g │ C: {r['carbs_g'] or 0:.0f}g │ F: {r['fat_g'] or 0:.0f}g"
+            f"  Remaining: {r['calories'] or 0:.0f} kcal │ P: {r['protein_g'] or 0:.0f}g │ C: {r['carbs_g'] or 0:.0f}g │ F: {r['fat_g'] or 0:.0f}g"
         )
     if status.get("water_ml", 0) > 0:
-        lines.append(f"  Wasser: {status['water_ml'] / 1000:.1f}L")
+        lines.append(f"  Water: {status['water_ml'] / 1000:.1f}L")
     return "\n".join(lines)
 
 
 def format_info_table(stats: dict) -> str:
     lines = [
         f"  DB: {stats['db_path']}",
-        f"  Schema-Version: {stats.get('schema_version', 'n/a')}",
-        f"  {stats['meals']} Mahlzeiten │ {stats['days_tracked']} Tage │ Seit: {stats['since'] or 'n/a'}",
-        f"  {stats['water_entries']} Wasser-Einträge │ {stats['targets']} Ziele",
+        f"  Schema version: {stats.get('schema_version', 'n/a')}",
+        f"  {stats['meals']} meals │ {stats['days_tracked']} days │ Since: {stats['since'] or 'n/a'}",
+        f"  {stats['water_entries']} water entries │ {stats['targets']} targets",
     ]
     return "\n".join(lines)

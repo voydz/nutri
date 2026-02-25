@@ -28,6 +28,14 @@ def now_time_str() -> str:
     return datetime.now().strftime("%H:%M")
 
 
+def parse_iso_date(value: str) -> str:
+    """Validate YYYY-MM-DD and return canonical ISO date string."""
+    try:
+        return date.fromisoformat(value).isoformat()
+    except ValueError as e:
+        raise ValueError(f"Invalid date: {value}. Use format YYYY-MM-DD.") from e
+
+
 def parse_duration(spec: str) -> tuple[str, str]:
     """Parse a duration spec like '7d', '30d' into (date_from, date_to) strings."""
     m = re.match(r"^(\d+)d$", spec)

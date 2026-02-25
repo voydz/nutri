@@ -1,13 +1,13 @@
 # AGENTS.md
 
-## Projekt
+## Project
 
-**nutri-cli** ist ein kleines, lokales CLI-Tool zum Tracken von Ernährung (Mahlzeiten, Makros, Wasser) in einer SQLite-Datenbank.
+**nutri-cli** is a small local CLI tool for tracking nutrition (meals, macros, water) in a SQLite database.
 
-## Entwicklung
+## Development
 
 - Runtime: Python >= 3.11
-- CLI: Typer (Click-kompatibel) + Rich als Dependency
+- CLI: Typer (Click-compatible) + Rich as a dependency
 - DB: SQLite (stdlib)
 
 ### Setup
@@ -16,19 +16,19 @@
 make setup
 ```
 
-### Lokales Ausführen
+### Run Locally
 
 ```bash
 uv run nutri --help
 uv run nutri today
 ```
 
-### Datenbank-Pfad
+### Database Path
 
-- Standard: XDG Data Directory (app-spezifisch)
+- Default: XDG Data Directory (app-specific)
 - Override: `NUTRI_DB_PATH=/path/to/db.sqlite3`
 
-### Konventionen
+### Conventions
 
-- Deutsche Ausgaben beibehalten
-- Verhalten/Flags der CLI sind 1:1 kompatibel zur ursprünglichen Click-Variante
+- Keep CLI output in English.
+- CLI behavior/flags remain 1:1 compatible with the original Click variant.

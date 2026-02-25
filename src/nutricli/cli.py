@@ -48,6 +48,14 @@ def get_conn():
     return db.get_connection()
 
 
+def parse_date_or_exit(value: str) -> str:
+    try:
+        return models.parse_iso_date(value)
+    except ValueError as e:
+        typer.echo(f"  {e}", err=True)
+        raise typer.Exit(1)
+
+
 # ── log ──────────────────────────────────────────────────────────────────────
 
 
@@ -103,7 +111,7 @@ def log(
     if fmt == OutputFormat.json:
         typer.echo(formatters.output_json(result))
     else:
-        typer.echo(f"  Mahlzeit #{meal_id} geloggt: {desc} ({cal:.0f} kcal)")
+        typer.echo(f"  Meal #{meal_id} logged: {desc} ({cal:.0f} kcal)")
 
 
 # ── edit ─────────────────────────────────────────────────────────────────────
@@ -156,13 +164,13 @@ def edit(
         updates["confidence"] = confidence.value
 
     if not updates:
-        typer.echo("  Keine Änderungen angegeben.", err=True)
+        typer.echo("  No changes provided.", err=True)
         conn.close()
         raise typer.Exit(1)
 
     ok = db.update_meal(conn, meal_id, **updates)
     if not ok:
-        typer.echo(f"  Mahlzeit #{meal_id} nicht gefunden.", err=True)
+        typer.echo(f"  Meal #{meal_id} not found.", err=True)
         conn.close()
         raise typer.Exit(1)
 
@@ -172,7 +180,7 @@ def edit(
     if fmt == OutputFormat.json:
         typer.echo(formatters.output_json(result))
     else:
-        typer.echo(f"  Mahlzeit #{meal_id} aktualisiert.")
+        typer.echo(f"  Meal #{meal_id} updated.")
 
 
 # ── delete ───────────────────────────────────────────────────────────────────
@@ -193,13 +201,13 @@ def delete(
     conn.close()
 
     if not ok:
-        typer.echo(f"  Mahlzeit #{meal_id} nicht gefunden.", err=True)
+        typer.echo(f"  Meal #{meal_id} not found.", err=True)
         raise typer.Exit(1)
 
     if fmt == OutputFormat.json:
         typer.echo(formatters.output_json({"deleted": meal_id, "meal": meal}))
     else:
-        typer.echo(f"  Mahlzeit #{meal_id} gelöscht.")
+        typer.echo(f"  Meal #{meal_id} deleted.")
 
 
 # ── confirm ──────────────────────────────────────────────────────────────────
@@ -219,13 +227,13 @@ def confirm(
     conn.close()
 
     if not ok:
-        typer.echo(f"  Mahlzeit #{meal_id} nicht gefunden.", err=True)
+        typer.echo(f"  Meal #{meal_id} not found.", err=True)
         raise typer.Exit(1)
 
     if fmt == OutputFormat.json:
         typer.echo(formatters.output_json({"confirmed": meal_id}))
     else:
-        typer.echo(f"  Mahlzeit #{meal_id} bestätigt.")
+        typer.echo(f"  Meal #{meal_id} confirmed.")
 
 
 # ── today ────────────────────────────────────────────────────────────────────
@@ -261,6 +269,7 @@ def day(
 ):
     """Show meals and totals for a specific date (YYYY-MM-DD)."""
 
+    date = parse_date_or_exit(date)
     conn = get_conn()
     summary = queries.day_summary(conn, date)
     conn.close()
@@ -318,7 +327,7 @@ def query(
         date_from = from_
         date_to = to_ or models.today_str()
     else:
-        typer.echo("  Bitte --last, --week, oder --from angeben.", err=True)
+        typer.echo("  Please provide --last, --week, or --from.", err=True)
         raise typer.Exit(1)
 
     conn = get_conn()
@@ -370,7 +379,7 @@ def target(
         return
 
     if cal is None:
-        typer.echo("  Bitte mindestens --cal angeben.", err=True)
+        typer.echo("  Please provide at least --cal.", err=True)
         conn.close()
         raise typer.Exit(1)
 
@@ -398,7 +407,7 @@ def target(
     if fmt == OutputFormat.json:
         typer.echo(formatters.output_json(result))
     else:
-        typer.echo(f"  Ziel gesetzt ab {d}: {cal:.0f} kcal")
+        typer.echo(f"  Target set from {d}: {cal:.0f} kcal")
 
 
 # ── water ────────────────────────────────────────────────────────────────────
@@ -433,7 +442,7 @@ def water(
             if entries:
                 typer.echo(formatters.format_water_table(entries, total))
             else:
-                typer.echo(f"  Kein Wasser für {d} geloggt.")
+                typer.echo(f"  No water logged for {d}.")
         return
 
     t = time_ or models.now_time_str()
@@ -449,7 +458,7 @@ def water(
             )
         )
     else:
-        typer.echo(f"  {amount:.0f} ml geloggt. Heute: {total / 1000:.1f}L")
+        typer.echo(f"  {amount:.0f} ml logged. Today: {total / 1000:.1f}L")
 
 
 # ── status ───────────────────────────────────────────────────────────────────
@@ -532,6 +541,6 @@ def export(
     if outfile:
         with open(outfile, "w") as f:
             f.write(content)
-        typer.echo(f"  Exportiert: {len(meals)} Mahlzeiten → {outfile}")
+        typer.echo(f"  Exported: {len(meals)} meals -> {outfile}")
     else:
         typer.echo(content)

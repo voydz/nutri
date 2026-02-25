@@ -88,8 +88,8 @@ def _ensure_schema(conn: sqlite3.Connection) -> None:
         _migrate(conn, version)
     elif version > SCHEMA_VERSION:
         raise RuntimeError(
-            f"Datenbank-Schema-Version {version} ist neuer als diese CLI "
-            f"(max {SCHEMA_VERSION}). Bitte nutri aktualisieren."
+            f"Database schema version {version} is newer than this CLI "
+            f"(max {SCHEMA_VERSION}). Please update nutri."
         )
 
 
@@ -98,9 +98,7 @@ def _migrate(conn: sqlite3.Connection, version: int) -> None:
         next_version = version + 1
         migration = MIGRATIONS.get(next_version)
         if not migration:
-            raise RuntimeError(
-                f"Keine Migration auf Schema-Version {next_version} vorhanden."
-            )
+            raise RuntimeError(f"No migration found for schema version {next_version}.")
         migration(conn)
         conn.execute(f"PRAGMA user_version = {next_version}")
         version = next_version

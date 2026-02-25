@@ -45,3 +45,7 @@ def test_cli_smoke(tmp_path: Path) -> None:
     assert result.returncode == 0, result.stderr
     status = json.loads(result.stdout)
     assert status["target"] is not None
+
+    result = _run_cli(["day", "today"], env)
+    assert result.returncode == 1
+    assert "Invalid date: today. Use format YYYY-MM-DD." in result.stderr

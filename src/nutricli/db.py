@@ -154,10 +154,6 @@ def delete_meal(conn: sqlite3.Connection, meal_id: int) -> bool:
     return cur.rowcount > 0
 
 
-def confirm_meal(conn: sqlite3.Connection, meal_id: int) -> bool:
-    return update_meal(conn, meal_id, confirmed=1)
-
-
 def get_meal(conn: sqlite3.Connection, meal_id: int) -> dict | None:
     row = conn.execute("SELECT * FROM meals WHERE id = ?", (meal_id,)).fetchone()
     return dict(row) if row else None

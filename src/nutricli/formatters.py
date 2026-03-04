@@ -20,7 +20,7 @@ def format_meal_row(m: dict) -> str:
     c = m.get("carbs_g", 0)
     f = m.get("fat_g", 0)
     conf = ""
-    if not m.get("confirmed") and m.get("confidence") != "high":
+    if m.get("confidence") != "high":
         conf = f" [{m.get('confidence', '?')}]"
     return f"  {mt:<12}│ {desc:<32}│ {cal:>6.0f} kcal │ P: {p:>5.1f}g │ C: {c:>5.1f}g │ F: {f:>5.1f}g{conf}"
 

@@ -23,6 +23,11 @@ def test_cli_smoke(tmp_path: Path) -> None:
     env["NUTRI_DB_PATH"] = str(db_path)
     env["HOME"] = str(home)
 
+    result = _run_cli([], env)
+    assert result.returncode == 0, result.stderr
+    assert "Usage:" in result.stdout
+    assert "Commands" in result.stdout
+
     result = _run_cli(["info", "--format", "json"], env)
     assert result.returncode == 0, result.stderr
     info = json.loads(result.stdout)

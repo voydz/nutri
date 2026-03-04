@@ -32,7 +32,6 @@ NUTRI_DB_PATH=/path/to/db.sqlite3 nutri <command>
 ```bash
 nutri log --meal lunch --desc "Bowl" --cal 650 --protein 45 --format json
 nutri edit 12 --cal 700 --format json
-nutri confirm 12 --format json
 nutri delete 12 --format json
 nutri today --format json
 nutri day 2026-01-15 --format json
@@ -56,9 +55,6 @@ nutri export --from 2026-01-01 --to 2026-01-31 --format json
   - Positional: `meal_id`
   - Flags: `--desc` `--cal` `--protein` `--carbs` `--fat` `--fiber` `--sugar` `--sodium` `--meal` `--confidence` `--format`
 - `delete`
-  - Positional: `meal_id`
-  - Flags: `--format`
-- `confirm`
   - Positional: `meal_id`
   - Flags: `--format`
 - `today`

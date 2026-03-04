@@ -12,7 +12,10 @@ import typer
 from . import db, formatters, models, queries
 
 
-app = typer.Typer(help="nutri — Nutrition Tracker CLI", add_completion=False)
+app = typer.Typer(
+    help="nutri — Nutrition Tracker CLI",
+    add_completion=False,
+)
 
 
 class OutputFormat(str, Enum):
@@ -54,6 +57,13 @@ def parse_date_or_exit(value: str) -> str:
     except ValueError as e:
         typer.echo(f"  {e}", err=True)
         raise typer.Exit(1)
+
+
+@app.callback(invoke_without_command=True)
+def _root(ctx: typer.Context) -> None:
+    if ctx.invoked_subcommand is None:
+        typer.echo(ctx.get_help())
+        raise typer.Exit(0)
 
 
 # ── log ──────────────────────────────────────────────────────────────────────
@@ -208,32 +218,6 @@ def delete(
         typer.echo(formatters.output_json({"deleted": meal_id, "meal": meal}))
     else:
         typer.echo(f"  Meal #{meal_id} deleted.")
-
-
-# ── confirm ──────────────────────────────────────────────────────────────────
-
-
-@app.command()
-def confirm(
-    meal_id: Annotated[int, typer.Argument()],
-    fmt: Annotated[
-        OutputFormat, typer.Option("--format", case_sensitive=False)
-    ] = OutputFormat.table,
-):
-    """Confirm a meal (mark as user-verified)."""
-
-    conn = get_conn()
-    ok = db.confirm_meal(conn, meal_id)
-    conn.close()
-
-    if not ok:
-        typer.echo(f"  Meal #{meal_id} not found.", err=True)
-        raise typer.Exit(1)
-
-    if fmt == OutputFormat.json:
-        typer.echo(formatters.output_json({"confirmed": meal_id}))
-    else:
-        typer.echo(f"  Meal #{meal_id} confirmed.")
 
 
 # ── today ────────────────────────────────────────────────────────────────────

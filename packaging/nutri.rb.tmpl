@@ -1,12 +1,15 @@
 class Nutri < Formula
   desc "CLI for nutrition tracking"
   homepage "https://github.com/voydz/nutri"
-  version "@VERSION@"
 
   on_macos do
     on_arm do
       url "https://github.com/voydz/nutri/releases/download/v@VERSION@/nutri-cli-@VERSION@-macos-arm64.tar.gz"
       sha256 "@SHA256_MACOS_ARM64@"
+    end
+    on_intel do
+      url "https://github.com/voydz/nutri/releases/download/v@VERSION@/nutri-cli-@VERSION@-macos-x86_64.tar.gz"
+      sha256 "@SHA256_MACOS_X86_64@"
     end
   end
 

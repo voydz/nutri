@@ -9,19 +9,20 @@ PYTHON_VERSION ?= 3.11
 UNAME_S := $(shell uname -s)
 UNAME_M := $(shell uname -m)
 
-ifeq ($(UNAME_S),Darwin)
-	OS := macos
-	# --target-arch is a macOS-only flag.
-	PYI_PLATFORM_FLAGS := --target-arch arm64
-else
-	OS := linux
-	PYI_PLATFORM_FLAGS :=
-endif
-
 ifeq ($(UNAME_M),x86_64)
 	ARCH := x86_64
 else
 	ARCH := arm64
+endif
+
+ifeq ($(UNAME_S),Darwin)
+	OS := macos
+	# --target-arch is a macOS-only flag; PyInstaller cannot cross-compile, so
+	# it can only ever match the host arch.
+	PYI_PLATFORM_FLAGS := --target-arch $(ARCH)
+else
+	OS := linux
+	PYI_PLATFORM_FLAGS :=
 endif
 
 SHA256 := $(shell command -v sha256sum >/dev/null 2>&1 && echo sha256sum || echo "shasum -a 256")

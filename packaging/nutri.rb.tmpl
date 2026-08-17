@@ -1,0 +1,31 @@
+class Nutri < Formula
+  desc "CLI for nutrition tracking"
+  homepage "https://github.com/voydz/nutri"
+  version "@VERSION@"
+
+  on_macos do
+    on_arm do
+      url "https://github.com/voydz/nutri/releases/download/v@VERSION@/nutri-cli-@VERSION@-macos-arm64.tar.gz"
+      sha256 "@SHA256_MACOS_ARM64@"
+    end
+  end
+
+  on_linux do
+    on_intel do
+      url "https://github.com/voydz/nutri/releases/download/v@VERSION@/nutri-cli-@VERSION@-linux-x86_64.tar.gz"
+      sha256 "@SHA256_LINUX_X86_64@"
+    end
+    on_arm do
+      url "https://github.com/voydz/nutri/releases/download/v@VERSION@/nutri-cli-@VERSION@-linux-arm64.tar.gz"
+      sha256 "@SHA256_LINUX_ARM64@"
+    end
+  end
+
+  def install
+    bin.install "nutri"
+  end
+
+  test do
+    system bin/"nutri", "--help"
+  end
+end

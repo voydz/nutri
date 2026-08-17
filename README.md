@@ -9,7 +9,17 @@ Small CLI tool for tracking meals, macros, targets, and water with a SQLite back
 - Export for analysis (e.g. CSV/JSON)
 - Compatible with the original Click version
 
-## Installation / Setup
+## Installation
+
+Via Homebrew (macOS on Apple Silicon, Linux on x86_64 and arm64):
+
+```bash
+brew install voydz/tap/nutri
+```
+
+The Linux binaries require glibc 2.28 or newer (Debian 11+, Ubuntu 20.04+, RHEL 8+).
+
+## Development Setup
 
 Requirements: Python 3.11+ and `uv`.
 
